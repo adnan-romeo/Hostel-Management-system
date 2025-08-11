@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body id="main-body" class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+
+    <div style="position: absolute; top: 1.5rem; right: 2rem; z-index: 50;">
+        <button id="theme-toggle" class="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 font-semibold shadow transition-colors duration-200">
+            🌙 Dark Mode
+        </button>
+    </div>
+    <div id="app-container" class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl transition-all duration-300">
+        <h1 class="text-4xl font-bold text-center mb-6"><span style="color: red;">Easy</span><span style="color: black;">Host</span></h1>
+
+        <div id="login-choice-screen" class="flex flex-col md:flex-row justify-center gap-8">
+            <button id="admin-login-choice-btn" class="flex-1 p-10 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600 transition-colors duration-200 text-2xl font-semibold">
+                Admin Login
+            </button>
+            <button id="student-login-choice-btn" class="flex-1 p-10 bg-green-500 text-white rounded-xl shadow-md hover:bg-green-600 transition-colors duration-200 text-2xl font-semibold">
+                Student Login
+            </button>
+        </div>
+
+        <div id="admin-login-panel" class="hidden">
+            <div class="flex-1 bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200">
+                <h2 class="text-2xl font-semibold mb-4 text-center">Admin Login</h2>
+                <form id="admin-login-form" class="space-y-4">
+                    <div>
+                        <label for="admin-username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="admin-username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="admin-password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="admin-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                        <label class="inline-flex items-center mt-2">
+                            <input type="checkbox" id="show-admin-password" class="mr-2">
+                            <span class="text-sm text-gray-600">Show Password</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Login as Admin
+                    </button>
+                    <div id="admin-captcha-container" class="mt-4">
+                        <label id="admin-captcha-label" class="block text-sm font-medium text-gray-700 mb-1"></label>
+                        <input type="text" id="admin-captcha-answer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Your answer" required>
+                    </div>
+                </form>
+                <button onclick="showLoginChoiceScreen()" class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Back</button>
+            </div>
+        </div>
+        
+        <div id="student-login-panel" class="hidden">
+            <div class="flex-1 bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200">
+                <h2 class="text-2xl font-semibold mb-4 text-center">Student Login</h2>
+                <form id="student-login-form" class="space-y-4">
+                    <div>
+                        <label for="student-id-login" class="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input type="text" id="student-id-login" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="student-password-login" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="student-password-login" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                        <label class="inline-flex items-center mt-2">
+                            <input type="checkbox" id="show-student-password" class="mr-2">
+                            <span class="text-sm text-gray-600">Show Password</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Login as Student
+                    </button>
+                    <div id="student-captcha-container" class="mt-4">
+                        <label id="student-captcha-label" class="block text-sm font-medium text-gray-700 mb-1"></label>
+                        <input type="text" id="student-captcha-answer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Your answer" required>
+                    </div>
+                </form>
+                <button onclick="showLoginChoiceScreen()" class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Back</button>
+            </div>
+        </div>
+
+        <div id="admin-dashboard" class="hidden">
+            <h2 class="text-3xl font-semibold mb-6">Admin Dashboard</h2>
+            <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+                <label for="hostel-selector" class="text-lg font-medium text-gray-700">Select Hostel:</label>
+                <select id="hostel-selector" class="block w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </select>
+                <button id="logout-btn" class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200">Logout</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <button onclick="showSection('search-room-admin')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Search Available Room</button>
+                <button onclick="showSection('issue-room')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Issue Room to Student</button>
+                <button onclick="showSection('show-student-info-admin')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Show Student Info</button>
+                <button onclick="showSection('show-all-students')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Show All Students</button>
+                <button onclick="showSection('manage-complaints')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Manage Complaints</button>
+                <button onclick="showSection('collect-fee')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Collect Fee</button>
+                <button onclick="showSection('change-room')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Change Room</button>
+                <button onclick="showSection('publish-notice')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Publish Hall Notice</button>
+                <button onclick="showSection('verify-payments')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Verify Student Payments</button>
+                <button onclick="showSection('remove-student-temp')" class="p-6 bg-blue-100 text-blue-800 rounded-xl shadow-md hover:bg-blue-200 transition-colors duration-200 font-semibold">Remove Student</button>
+                <button onclick="showSection('sensitive-actions')" class="p-6 bg-gray-100 text-gray-800 rounded-xl shadow-md hover:bg-gray-200 transition-colors duration-200 font-semibold">Advance Actions</button>
+            </div>
+
+            <div id="admin-content-area" class="mt-8 p-6 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                <p class="text-gray-500">Select an option from the menu to get started.</p>
+            </div>
+        </div>
+
+        <div id="student-dashboard" class="hidden">
+            <h2 class="text-3xl font-semibold mb-6">Student Dashboard</h2>
+            <div class="mb-6 flex justify-end">
+                <button id="student-logout-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200">Logout</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="showStudentSection('my-info')" class="p-6 bg-green-100 text-green-800 rounded-xl shadow-md hover:bg-green-200 transition-colors duration-200 font-semibold">My Info</button>
+                <button onclick="showStudentSection('lodge-complaint')" class="p-6 bg-green-100 text-green-800 rounded-xl shadow-md hover:bg-green-200 transition-colors duration-200 font-semibold">Lodge a Complaint</button>
+                <button onclick="showStudentSection('view-notice')" class="p-6 bg-green-100 text-green-800 rounded-xl shadow-md hover:bg-green-200 transition-colors duration-200 font-semibold">View Hall Notice</button>
+                <button onclick="showStudentSection('pay-fee')" class="p-6 bg-green-100 text-green-800 rounded-xl shadow-md hover:bg-green-200 transition-colors duration-200 font-semibold">Pay Hostel Fee</button>
+                <button onclick="showStudentSection('change-password')" class="p-6 bg-green-100 text-green-800 rounded-xl shadow-md hover:bg-green-200 transition-colors duration-200 font-semibold">Change Password</button>
+            </div>
+            
+            <div id="student-content-area" class="mt-8 p-6 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                <p class="text-gray-500">Select an option from the menu to get started.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- Theme Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const mainBody = document.getElementById('main-body');
+        const appContainer = document.getElementById('app-container');
+        let isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+
+        function applyTheme() {
+            // Main background and container
+            if (isDarkMode) {
+                mainBody.classList.add('bg-gray-900');
+                mainBody.classList.remove('bg-gray-100');
+                appContainer.classList.add('bg-gray-800', 'text-gray-100');
+                appContainer.classList.remove('bg-white', 'text-gray-800');
+                themeToggleBtn.textContent = '☀️ Light Mode';
+                themeToggleBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                themeToggleBtn.classList.add('bg-gray-700', 'text-gray-100');
+            } else {
+                mainBody.classList.remove('bg-gray-900');
+                mainBody.classList.add('bg-gray-100');
+                appContainer.classList.remove('bg-gray-800', 'text-gray-100');
+                appContainer.classList.add('bg-white', 'text-gray-800');
+                themeToggleBtn.textContent = '🌙 Dark Mode';
+                themeToggleBtn.classList.add('bg-gray-200', 'text-gray-800');
+                themeToggleBtn.classList.remove('bg-gray-700', 'text-gray-100');
+            }
+
+            // Update headings and labels for visibility
+            document.querySelectorAll('h1, h2, h3, h4, h5, h6, .font-semibold, .font-bold, .text-gray-800, .text-gray-700, .text-gray-600').forEach(el => {
+                if (isDarkMode) {
+                    el.classList.add('text-gray-100');
+                    el.classList.remove('text-gray-800', 'text-gray-700', 'text-gray-600');
+                } else {
+                    el.classList.remove('text-gray-100');
+                }
+            });
+
+            // Update content areas and cards
+            document.querySelectorAll('#admin-content-area, #student-content-area, .bg-gray-50, .bg-white, .bg-gray-100, .bg-gray-200, .bg-red-50, .bg-blue-100, .bg-green-100, .bg-red-100, .bg-purple-600, .bg-yellow-500, .bg-orange-500').forEach(el => {
+                if (isDarkMode) {
+                    // Check for specific classes and apply appropriate dark mode colors
+                    if (el.classList.contains('bg-gray-50') || el.classList.contains('bg-white') || el.classList.contains('bg-gray-100') || el.classList.contains('bg-gray-200')) {
+                        el.classList.add('bg-gray-700', 'border-gray-600', 'text-gray-100');
+                        el.classList.remove('bg-gray-50', 'bg-white', 'bg-gray-100', 'bg-gray-200', 'border-gray-200', 'border-gray-300', 'text-gray-800');
+                    } else if (el.classList.contains('bg-blue-100')) {
+                        el.classList.add('bg-blue-800', 'text-blue-100', 'hover:bg-blue-900');
+                        el.classList.remove('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
+                    } else if (el.classList.contains('bg-green-100')) {
+                        el.classList.add('bg-green-800', 'text-green-100', 'hover:bg-green-900');
+                        el.classList.remove('bg-green-100', 'text-green-800', 'hover:bg-green-200');
+                    } else if (el.classList.contains('bg-red-100')) {
+                         el.classList.add('bg-red-800', 'text-red-100', 'hover:bg-red-900');
+                        el.classList.remove('bg-red-100', 'text-red-800', 'hover:bg-red-200');
+                    }
+                    if (el.id === 'admin-content-area' || el.id === 'student-content-area') {
+                        el.classList.add('bg-gray-700', 'border-gray-600');
+                        el.classList.remove('bg-gray-50', 'border-gray-200');
+                    }
+                } else {
+                    // Restore original classes for light mode
+                    el.classList.remove('bg-gray-700', 'border-gray-600', 'text-gray-100', 'bg-blue-800', 'text-blue-100', 'hover:bg-blue-900', 'bg-green-800', 'text-green-100', 'hover:bg-green-900', 'bg-red-800', 'text-red-100', 'hover:bg-red-900');
+
+                    // Restore specific light mode classes
+                    if (el.classList.contains('bg-gray-50')) {
+                        el.classList.add('bg-gray-50', 'border-gray-200');
+                    } else if (el.id === 'app-container' || el.classList.contains('bg-white')) {
+                        el.classList.add('bg-white', 'text-gray-800', 'border-gray-300');
+                    } else if (el.classList.contains('bg-blue-100')) {
+                        el.classList.add('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
+                    } else if (el.classList.contains('bg-green-100')) {
+                        el.classList.add('bg-green-100', 'text-green-800', 'hover:bg-green-200');
+                    } else if (el.classList.contains('bg-red-100')) {
+                        el.classList.add('bg-red-100', 'text-red-800', 'hover:bg-red-200');
+                    }
+                    if (el.id === 'admin-content-area' || el.id === 'student-content-area') {
+                        el.classList.add('bg-gray-50', 'border-gray-200');
+                    }
+                }
+            });
+
+            // Update text color for paragraphs and spans
+            document.querySelectorAll('p, span').forEach(el => {
+                if (isDarkMode) {
+                    el.classList.add('text-gray-100');
+                    el.classList.remove('text-gray-700', 'text-gray-600', 'text-gray-500', 'text-gray-800');
+                } else {
+                    el.classList.remove('text-gray-100');
+                }
+            });
+
+            // Update input and select fields for dark mode
+            document.querySelectorAll('input, select, textarea').forEach(input => {
+                if (isDarkMode) {
+                    input.classList.add('bg-gray-900', 'text-gray-100', 'border-gray-700', 'placeholder-gray-400');
+                    input.classList.remove('bg-white', 'bg-gray-50', 'text-gray-800', 'border-gray-300', 'placeholder-gray-500');
+                } else {
+                    input.classList.remove('bg-gray-900', 'text-gray-100', 'border-gray-700', 'placeholder-gray-400');
+                    input.classList.add('bg-white', 'text-gray-800', 'border-gray-300', 'placeholder-gray-500');
+                }
+            });
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('isDarkMode', isDarkMode);
+            applyTheme();
+        });
+        applyTheme();
+
+        // --- Constants and Global Variables ---
+        let ADMIN_USERNAME = localStorage.getItem('adminUsername') || 'admin';
+        let ADMIN_PASSWORD = localStorage.getItem('adminPassword') || 'password';
+        const MAX_STUDENTS = 100;
+        const MAX_ROOMS = 50;
+        const MAX_HOSTELS = 3;
+
+        let hostels = [];
+        let currentHostelIndex = -1;
+        let loggedInStudentId = '';
+
+        let paymentRequests = JSON.parse(localStorage.getItem('paymentRequests') || '[]');
+        let permanentlyRemovedStudents = JSON.parse(localStorage.getItem('permanentlyRemovedStudents') || '[]');
+
+        // --- DOM Elements ---
+        const loginChoiceScreen = document.getElementById('login-choice-screen');
+        const adminLoginPanel = document.getElementById('admin-login-panel');
+        const studentLoginPanel = document.getElementById('student-login-panel');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const studentDashboard = document.getElementById('student-dashboard');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const studentLoginForm = document.getElementById('student-login-form');
+        const hostelSelector = document.getElementById('hostel-selector');
+        const adminContentArea = document.getElementById('admin-content-area');
+        const studentContentArea = document.getElementById('student-content-area');
+        const logoutBtn = document.getElementById('logout-btn');
+        const studentLogoutBtn = document.getElementById('student-logout-btn');
+
+        // --- Initialization and Data Persistence ---
+        function initializeHostels() {
+            hostels = [
+                { name: 'YKSG-1', rooms: [], students: [], complaints: [], notice: 'No new notices.', total_students: 0, total_complaints: 0 },
+                { name: 'YKSG-2', rooms: [], students: [], complaints: [], notice: 'No new notices.', total_students: 0, total_complaints: 0 },
+                { name: 'YKSG-3', rooms: [], students: [], complaints: [], notice: 'No new notices.', total_students: 0, total_complaints: 0 }
+            ];
+            hostels.forEach(hostel => {
+                for (let i = 0; i < MAX_ROOMS; i++) {
+                    hostel.rooms.push({ room_number: 101 + i, is_occupied: false, occupied_by_id: '' });
+                }
+            });
+        }
+
+        function saveHostelsToLocalStorage() {
+            localStorage.setItem('hostelData', JSON.stringify(hostels));
+        }
+
+        function loadHostelsFromLocalStorage() {
+            const savedData = localStorage.getItem('hostelData');
+            if (savedData) {
+                hostels = JSON.parse(savedData);
+                console.log('Hostel data loaded from local storage.');
+            } else {
+                initializeHostels();
+                console.log('No saved data found. Initializing new data.');
+            }
+        }
+
+        // Populates the hostel dropdown for the admin
+        function populateHostelSelector() {
+            hostelSelector.innerHTML = '';
+            hostels.forEach((hostel, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = hostel.name;
+                hostelSelector.appendChild(option);
+            });
+            hostelSelector.value = currentHostelIndex !== -1 ? currentHostelIndex : 0;
+            currentHostelIndex = parseInt(hostelSelector.value);
+        }
+
+        // --- UI State Management ---
+        function showScreen(screenId) {
+            loginChoiceScreen.classList.add('hidden');
+            adminLoginPanel.classList.add('hidden');
+            studentLoginPanel.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+            studentDashboard.classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showLoginChoiceScreen() {
+            showScreen('login-choice-screen');
+        }
+
+        function showAdminLoginPanel() {
+            showScreen('admin-login-panel');
+        }
+
+        function showStudentLoginPanel() {
+            showScreen('student-login-panel');
+        }
+
+        function showSection(sectionName) {
+            adminContentArea.innerHTML = '';
+            const h2 = document.createElement('h2');
+            h2.className = 'text-2xl font-semibold mb-4 text-gray-800';
+            const separator = document.createElement('div');
+            separator.className = 'border-b border-gray-300 pb-2 mb-4';
+
+            // Functionality to render different sections
+            switch(sectionName) {
+                case 'search-room-admin':
+                    h2.textContent = 'Search Available Room';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    searchAvailableRoom();
+                    break;
+                case 'issue-room':
+                    h2.textContent = 'Issue Room to Student';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderIssueRoomForm();
+                    break;
+                case 'show-student-info-admin':
+                    h2.textContent = 'Show Student Info';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderShowStudentInfoForm();
+                    break;
+                case 'show-all-students':
+                    h2.textContent = 'All Students in ' + hostels[currentHostelIndex].name;
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    showAllStudents();
+                    break;
+                case 'manage-complaints':
+                    h2.textContent = 'Manage Complaints';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    manageComplaints();
+                    break;
+                case 'remove-student-perm':
+                    h2.textContent = 'Permanent Remove Student';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderRemoveStudentPermForm();
+                    break;
+                case 'remove-student-temp':
+                    h2.textContent = 'Remove Student (Temporary)';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderRemoveStudentTempForm();
+                    break;
+                case 'collect-fee':
+                    h2.textContent = 'Collect Fee';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderCollectFeeForm();
+                    break;
+                case 'change-room':
+                    h2.textContent = 'Change Room';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderChangeRoomForm();
+                    break;
+                case 'publish-notice':
+                    h2.textContent = 'Publish Hall Notice';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderPublishNoticeForm();
+                    break;
+                case 'change-admin-credentials':
+                    h2.textContent = 'Change Admin Credentials';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderChangeAdminCredentialsForm();
+                    break;
+                case 'verify-payments':
+                    h2.textContent = 'Verify Student Payments';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderVerifyPayments();
+                    break;
+                case 'reset-local-data':
+                    h2.textContent = 'Delete All Local Data (Reset to Default)';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderResetLocalDataForm();
+                    break;
+                case 'sensitive-actions':
+                    h2.textContent = 'Sensitive Admin Actions';
+                    adminContentArea.appendChild(h2);
+                    adminContentArea.appendChild(separator);
+                    renderSensitiveActions();
+                    break;
+                default:
+                    adminContentArea.innerHTML = '<p class="text-gray-500">Select an option from the menu to get started.</p>';
+            }
+            applyTheme();
+        }
+        
+        function showStudentSection(sectionName) {
+            studentContentArea.innerHTML = '';
+            const h2 = document.createElement('h2');
+            h2.className = 'text-2xl font-semibold mb-4 text-gray-800';
+            const separator = document.createElement('div');
+            separator.className = 'border-b border-gray-300 pb-2 mb-4';
+            
+            switch(sectionName) {
+                case 'my-info':
+                    h2.textContent = 'My Info';
+                    studentContentArea.appendChild(h2);
+                    studentContentArea.appendChild(separator);
+                    showStudentInfoStudent();
+                    break;
+                case 'lodge-complaint':
+                    h2.textContent = 'Lodge a Complaint';
+                    studentContentArea.appendChild(h2);
+                    studentContentArea.appendChild(separator);
+                    renderLodgeComplaintForm();
+                    break;
+                case 'view-notice':
+                    h2.textContent = 'Hall Notice';
+                    studentContentArea.appendChild(h2);
+                    studentContentArea.appendChild(separator);
+                    viewHallNotice();
+                    break;
+                case 'pay-fee':
+                    h2.textContent = 'Pay Hostel Fee';
+                    studentContentArea.appendChild(h2);
+                    studentContentArea.appendChild(separator);
+                    renderPayFeeForm();
+                    break;
+                case 'change-password':
+                    h2.textContent = 'Change Password';
+                    studentContentArea.appendChild(h2);
+                    studentContentArea.appendChild(separator);
+                    renderChangeStudentPasswordForm();
+                    break;
+                default:
+                    studentContentArea.innerHTML = '<p class="text-gray-500">Select an option from the menu to get started.</p>';
+            }
+            applyTheme();
+        }
+
+        function renderSensitiveActions() {
+            adminContentArea.innerHTML += `
+                <div class="space-y-4">
+                    <button onclick="showSection('remove-student-perm')" class="w-full py-3 px-4 bg-red-100 text-red-800 rounded-xl shadow-md hover:bg-red-200 font-semibold">Permanent Remove Student</button>
+                    <button onclick="showSection('change-admin-credentials')" class="w-full py-3 px-4 bg-red-100 text-red-800 rounded-xl shadow-md hover:bg-red-200 font-semibold">Change Admin Credentials</button>
+                     <button onclick="showSection('reset-local-data')" class="w-full py-3 px-4 bg-red-100 text-red-800 rounded-xl shadow-md hover:bg-red-200 font-semibold">Delete All Local Data (Reset to Default)</button>
+                </div>
+                <div class="mt-6">
+                    <button onclick="showSection('')" class="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Back to Dashboard</button>
+                </div>
+            `;
+        }
+
+        // --- Helper Functions ---
+        function findStudentById(studentId, hostelIndex = currentHostelIndex) {
+            if (hostelIndex === -1) return null;
+            return hostels[hostelIndex].students.find(s => s.student_id === studentId);
+        }
+
+        function findStudentInAnyHostel(studentId) {
+            for (let i = 0; i < hostels.length; i++) {
+                const student = hostels[i].students.find(s => s.student_id === studentId);
+                if (student) {
+                    return { student, hostelIndex: i };
+                }
+            }
+            return null;
+        }
+
+        function findRoomByNumber(roomNumber, hostelIndex = currentHostelIndex) {
+            if (hostelIndex === -1) return null;
+            return hostels[hostelIndex].rooms.find(r => r.room_number === roomNumber);
+        }
+        
+        function findRoomIndexByNumber(roomNumber, hostelIndex = currentHostelIndex) {
+            if (hostelIndex === -1) return -1;
+            return hostels[hostelIndex].rooms.findIndex(r => r.room_number === roomNumber);
+        }
+
+        function findStudentIndexById(studentId, hostelIndex = currentHostelIndex) {
+            if (hostelIndex === -1) return -1;
+            return hostels[hostelIndex].students.findIndex(s => s.student_id === studentId);
+        }
+
+        // --- Admin Functions ---
+        function searchAvailableRoom() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            let availableRooms = hostels[currentHostelIndex].rooms.filter(r => !r.is_occupied);
+            let content = '';
+            if (availableRooms.length > 0) {
+                content += '<p class="mb-2">Available rooms:</p>';
+                content += '<ul class="list-disc list-inside space-y-1">';
+                availableRooms.forEach(room => {
+                    content += `<li>Room ${room.room_number}</li>`;
+                });
+                content += '</ul>';
+            } else {
+                content = '<p class="text-red-500">No rooms are currently available.</p>';
+            }
+            adminContentArea.innerHTML += content;
+            applyTheme();
+        }
+
+        function renderIssueRoomForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="issue-room-form" class="space-y-4">
+                    <div>
+                        <label for="student-name" class="block text-sm font-medium text-gray-700">Student Name</label>
+                        <input type="text" id="student-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input type="text" id="student-id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="student-password" class="block text-sm font-medium text-gray-700">Student Password</label>
+                        <input type="password" id="student-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Issue Room</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+
+            document.getElementById('issue-room-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('student-name').value;
+                const studentId = document.getElementById('student-id').value;
+                const password = document.getElementById('student-password').value;
+
+                if (hostels[currentHostelIndex].total_students >= MAX_STUDENTS) {
+                    alert('Hostel is full. Cannot issue new rooms.');
+                    return;
+                }
+
+                if (permanentlyRemovedStudents.includes(studentId)) {
+                    alert('This student ID has been permanently removed and cannot be added again.');
+                    return;
+                }
+
+                if (findStudentInAnyHostel(studentId)) {
+                    alert('A student with this ID already exists.');
+                    return;
+                }
+
+                let roomToIssue = -1;
+                for (let i = 0; i < hostels[currentHostelIndex].rooms.length; i++) {
+                    if (!hostels[currentHostelIndex].rooms[i].is_occupied) {
+                        roomToIssue = hostels[currentHostelIndex].rooms[i].room_number;
+                        hostels[currentHostelIndex].rooms[i].is_occupied = true;
+                        hostels[currentHostelIndex].rooms[i].occupied_by_id = studentId;
+                        break;
+                    }
+                }
+
+                if (roomToIssue !== -1) {
+                    const newStudent = {
+                        student_id: studentId,
+                        name: name,
+                        room_number: roomToIssue,
+                        hostel_name: hostels[currentHostelIndex].name,
+                        fees_due: 10000.00,
+                        password: password
+                    };
+                    hostels[currentHostelIndex].students.push(newStudent);
+                    hostels[currentHostelIndex].total_students++;
+                    alert(`Room ${roomToIssue} issued to student ${name} (${studentId}) successfully.`);
+                    saveHostelsToLocalStorage();
+                    showSection('issue-room');
+                } else {
+                    alert('No rooms available in this hostel.');
+                }
+            });
+            applyTheme();
+        }
+        
+        function renderShowStudentInfoForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="show-student-info-form" class="space-y-4">
+                    <div>
+                        <label for="search-student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input type="text" id="search-student-id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Search</button>
+                </form>
+                <div id="student-info-result" class="mt-4 p-4 bg-white rounded-md shadow"></div>
+            `;
+            adminContentArea.innerHTML += formHtml;
+
+            document.getElementById('show-student-info-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('search-student-id').value;
+                const studentInfoResult = document.getElementById('student-info-result');
+                const student = findStudentById(studentId);
+
+                if (student) {
+                    studentInfoResult.innerHTML = `
+                        <p><strong>Name:</strong> ${student.name}</p>
+                        <p><strong>Student ID:</strong> ${student.student_id}</p>
+                        <p><strong>Room Number:</strong> ${student.room_number}</p>
+                        <p><strong>Hostel:</strong> ${student.hostel_name}</p>
+                        <p><strong>Fees Due:</strong> ৳${student.fees_due.toFixed(2)}</p>
+                    `;
+                } else {
+                    studentInfoResult.innerHTML = `<p class="text-red-500">Student with ID ${studentId} not found in this hostel.</p>`;
+                }
+                applyTheme();
+            });
+            applyTheme();
+        }
+
+        function showAllStudents() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            if (hostels[currentHostelIndex].total_students === 0) {
+                adminContentArea.innerHTML += '<p>No students registered in this hostel.</p>';
+                return;
+            }
+
+            let studentsHtml = '<ul class="space-y-2">';
+            hostels[currentHostelIndex].students.forEach(student => {
+                studentsHtml += `
+                    <li class="p-4 bg-white rounded-md shadow-sm">
+                        <strong>Name:</strong> ${student.name}, 
+                        <strong>ID:</strong> ${student.student_id}, 
+                        <strong>Room:</strong> ${student.room_number}, 
+                        <strong>Fees Due:</strong> ৳${student.fees_due.toFixed(2)}
+                    </li>
+                `;
+            });
+            studentsHtml += '</ul>';
+            adminContentArea.innerHTML += studentsHtml;
+            applyTheme();
+        }
+
+        function manageComplaints() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const complaints = hostels[currentHostelIndex].complaints;
+            if (complaints.length === 0) {
+                adminContentArea.innerHTML += '<p>No complaints to show.</p>';
+                return;
+            }
+
+            let complaintsHtml = '<ul class="space-y-4">';
+            complaints.forEach((c, index) => {
+                complaintsHtml += `
+                    <li class="p-4 bg-white rounded-md shadow-sm">
+                        <div class="font-bold">Complaint #${index + 1}</div>
+                        <div><strong>Student ID:</strong> ${c.student_id}</div>
+                        <div><strong>Complaint:</strong> ${c.complaint_text}</div>
+                        <div><strong>Status:</strong> <span class="${c.is_resolved ? 'text-green-600' : 'text-red-600'}">${c.is_resolved ? 'Resolved' : 'Pending'}</span></div>
+                        <button onclick="resolveComplaint(${index})" class="mt-2 px-3 py-1 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 ${c.is_resolved ? 'hidden' : ''}">Resolve</button>
+                    </li>
+                `;
+            });
+            complaintsHtml += '</ul>';
+            adminContentArea.innerHTML += complaintsHtml;
+            applyTheme();
+        }
+
+        function resolveComplaint(index) {
+            hostels[currentHostelIndex].complaints[index].is_resolved = true;
+            saveHostelsToLocalStorage();
+            showSection('manage-complaints');
+            alert(`Complaint #${index + 1} marked as resolved.`);
+        }
+        function renderRemoveStudentPermForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="remove-student-perm-form" class="space-y-4">
+                    <div>
+                        <label for="remove-student-id-perm" class="block text-sm font-medium text-red-700">Student ID to permanently remove</label>
+                        <input type="text" id="remove-student-id-perm" class="mt-1 block w-full px-3 py-2 border border-red-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 bg-red-50 text-red-800" required>
+                    </div>
+                    <div>
+                        <label for="remove-admin-password-perm" class="block text-sm font-medium text-gray-700">Admin Password</label>
+                        <input type="password" id="remove-admin-password-perm" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700">Permanently Remove Student</button>
+                </form>
+                <p class="text-red-500 mt-2">This action cannot be undone. Student cannot be added again in future.</p>
+            `;
+            adminContentArea.innerHTML += formHtml;
+        
+            document.getElementById('remove-student-perm-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('remove-student-id-perm').value;
+                const enteredPassword = document.getElementById('remove-admin-password-perm').value;
+                const studentIndex = findStudentIndexById(studentId);
+        
+                if (enteredPassword !== ADMIN_PASSWORD) {
+                    alert('Incorrect admin password. Student not permanently removed.');
+                    return;
+                }
+                // Add to blacklist
+                if (!permanentlyRemovedStudents.includes(studentId)) {
+                    permanentlyRemovedStudents.push(studentId);
+                    localStorage.setItem('permanentlyRemovedStudents', JSON.stringify(permanentlyRemovedStudents));
+                }
+        
+                if (studentIndex !== -1) {
+                    const student = hostels[currentHostelIndex].students[studentIndex];
+                    const roomIndex = findRoomIndexByNumber(student.room_number);
+        
+                    if (roomIndex !== -1) {
+                        hostels[currentHostelIndex].rooms[roomIndex].is_occupied = false;
+                        hostels[currentHostelIndex].rooms[roomIndex].occupied_by_id = '';
+                    }
+        
+                    hostels[currentHostelIndex].students.splice(studentIndex, 1);
+                    hostels[currentHostelIndex].total_students--;
+                    alert(`Student ${studentId} permanently removed and cannot be added in future.`);
+                    saveHostelsToLocalStorage();
+                    showSection('remove-student-perm');
+                } else {
+                    alert(`Student with ID ${studentId} not found.`);
+                }
+            });
+            applyTheme();
+        }
+        function renderRemoveStudentTempForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="remove-student-temp-form" class="space-y-4">
+                    <div>
+                        <label for="remove-student-id-temp" class="block text-sm font-medium text-gray-700">Student ID to remove</label>
+                        <input type="text" id="remove-student-id-temp" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700">Remove Student</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+        
+            document.getElementById('remove-student-temp-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('remove-student-id-temp').value;
+                const studentIndex = findStudentIndexById(studentId);
+        
+                if (studentIndex !== -1) {
+                    const student = hostels[currentHostelIndex].students[studentIndex];
+                    const roomIndex = findRoomIndexByNumber(student.room_number);
+        
+                    if (roomIndex !== -1) {
+                        hostels[currentHostelIndex].rooms[roomIndex].is_occupied = false;
+                        hostels[currentHostelIndex].rooms[roomIndex].occupied_by_id = '';
+                    }
+        
+                    hostels[currentHostelIndex].students.splice(studentIndex, 1);
+                    hostels[currentHostelIndex].total_students--;
+                    alert(`Student ${studentId} removed temporarily. They can be added again in future.`);
+                    saveHostelsToLocalStorage();
+                    showSection('remove-student-temp');
+                } else {
+                    alert(`Student with ID ${studentId} not found.`);
+                }
+            });
+            applyTheme();
+        }
+        
+        
+        function renderCollectFeeForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="collect-fee-form" class="space-y-4">
+                    <div>
+                        <label for="fee-student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input type="text" id="fee-student-id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="fee-amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                        <input type="number" id="fee-amount" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700">Collect Fee</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+
+            document.getElementById('collect-fee-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('fee-student-id').value;
+                const amount = parseFloat(document.getElementById('fee-amount').value);
+                const student = findStudentById(studentId);
+
+                if (student) {
+                    if (amount > student.fees_due) {
+                        alert('Amount collected is greater than fees due.');
+                    } else {
+                        student.fees_due -= amount;
+                        alert(`Collected $${amount.toFixed(2)}. Remaining fees: $${student.fees_due.toFixed(2)}.`);
+                        saveHostelsToLocalStorage();
+                        showSection('collect-fee');
+                    }
+                } else {
+                    alert(`Student with ID ${studentId} not found.`);
+                }
+            });
+            applyTheme();
+        }
+
+        function renderChangeRoomForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="change-room-form" class="space-y-4">
+                    <div>
+                        <label for="change-room-student-id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                        <input type="text" id="change-room-student-id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="new-room-number" class="block text-sm font-medium text-gray-700">New Room Number</label>
+                        <input type="number" id="new-room-number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Change Room</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+            
+            document.getElementById('change-room-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('change-room-student-id').value;
+                const newRoomNumber = parseInt(document.getElementById('new-room-number').value);
+                
+                const student = findStudentById(studentId);
+                const newRoom = findRoomByNumber(newRoomNumber);
+
+                if (!student) {
+                    alert(`Student with ID ${studentId} not found.`);
+                    return;
+                }
+                
+                if (!newRoom || newRoom.is_occupied) {
+                    alert('Invalid new room number or the room is already occupied.');
+                    return;
+                }
+
+                const oldRoom = findRoomByNumber(student.room_number);
+                if (oldRoom) {
+                    oldRoom.is_occupied = false;
+                    oldRoom.occupied_by_id = '';
+                }
+
+                newRoom.is_occupied = true;
+                newRoom.occupied_by_id = studentId;
+                student.room_number = newRoomNumber;
+                
+                alert(`Student ${studentId} moved from room ${oldRoom.room_number} to ${newRoomNumber} successfully.`);
+                saveHostelsToLocalStorage();
+                showSection('change-room');
+            });
+            applyTheme();
+        }
+        
+        function renderPublishNoticeForm() {
+            if (currentHostelIndex === -1) {
+                adminContentArea.innerHTML += '<p class="text-red-500">Please select a hostel first.</p>';
+                return;
+            }
+            const formHtml = `
+                <form id="publish-notice-form" class="space-y-4">
+                    <div>
+                        <label for="notice-text" class="block text-sm font-medium text-gray-700">New Notice</label>
+                        <textarea id="notice-text" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-purple-600 text-white rounded-md hover:bg-purple-700">Publish Notice</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+            
+            document.getElementById('publish-notice-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const noticeText = document.getElementById('notice-text').value;
+                hostels[currentHostelIndex].notice = noticeText;
+                alert('Notice published successfully.');
+                saveHostelsToLocalStorage();
+                showSection('publish-notice');
+            });
+            applyTheme();
+        }
+
+        function renderChangeAdminCredentialsForm() {
+            const formHtml = `
+                <form id="change-admin-credentials-form" class="space-y-4">
+                    <div>
+                        <label for="current-admin-password" class="block text-sm font-medium text-gray-700">Current Password</label>
+                        <input type="password" id="current-admin-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="new-admin-username" class="block text-sm font-medium text-gray-700">New Username</label>
+                        <input type="text" id="new-admin-username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="new-admin-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" id="new-admin-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-purple-600 text-white rounded-md hover:bg-purple-700">Change Credentials</button>
+                </form>
+            `;
+            adminContentArea.innerHTML += formHtml;
+
+            document.getElementById('change-admin-credentials-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const currentPassword = document.getElementById('current-admin-password').value;
+                const newUsername = document.getElementById('new-admin-username').value;
+                const newPassword = document.getElementById('new-admin-password').value;
+
+                if (currentPassword !== ADMIN_PASSWORD) {
+                    alert('Current password is incorrect.');
+                    return;
+                }
+                ADMIN_USERNAME = newUsername;
+                ADMIN_PASSWORD = newPassword;
+                localStorage.setItem('adminUsername', ADMIN_USERNAME);
+                localStorage.setItem('adminPassword', ADMIN_PASSWORD);
+                alert('Admin credentials changed successfully.');
+                showSection('');
+            });
+            applyTheme();
+        }
+
+        function renderVerifyPayments() {
+            paymentRequests = JSON.parse(localStorage.getItem('paymentRequests') || '[]');
+            if (paymentRequests.length === 0) {
+                adminContentArea.innerHTML += '<p>No payment requests found.</p>';
+                return;
+            }
+            let html = '<ul class="space-y-4">';
+            paymentRequests.forEach((req, idx) => {
+                html += `
+                    <li class="p-4 bg-white rounded-md shadow-sm">
+                        <div><strong>Student:</strong> ${req.student_name} (${req.student_id})</div>
+                        <div><strong>Hostel:</strong> ${req.hostel_name}</div>
+                        <div><strong>Mobile:</strong> ${req.mobile_number}</div>
+                        <div><strong>Transaction ID:</strong> ${req.transaction_id}</div>
+                        <div><strong>Amount:</strong> ৳${req.pay_amount.toFixed(2)}</div>
+                        <div><strong>Time:</strong> ${new Date(req.timestamp).toLocaleString()}</div>
+                        <button onclick="approvePayment(${idx})" class="mt-2 px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700">Approve & Update Fees</button>
+                        <button onclick="rejectPayment(${idx})" class="mt-2 px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700">Reject</button>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            adminContentArea.innerHTML += html;
+            applyTheme();
+        }
+
+        function approvePayment(idx) {
+            const req = paymentRequests[idx];
+            const studentData = findStudentInAnyHostel(req.student_id);
+            if (studentData) {
+                studentData.student.fees_due -= req.pay_amount;
+                saveHostelsToLocalStorage();
+                alert(`Payment approved and fees updated for ${req.student_name}.`);
+            } else {
+                alert('Student not found.');
+            }
+            paymentRequests.splice(idx, 1);
+            localStorage.setItem('paymentRequests', JSON.stringify(paymentRequests));
+            showSection('verify-payments');
+        }
+
+        function rejectPayment(idx) {
+            paymentRequests.splice(idx, 1);
+            localStorage.setItem('paymentRequests', JSON.stringify(paymentRequests));
+            alert('Payment request rejected.');
+            showSection('verify-payments');
+        }
+
+        // --- Student Functions ---
+        function showStudentInfoStudent() {
+            const studentData = findStudentInAnyHostel(loggedInStudentId);
+            if (studentData) {
+                const student = studentData.student;
+                studentContentArea.innerHTML += `
+                    <div class="p-4 bg-white rounded-md shadow-sm">
+                        <p><strong>Name:</strong> ${student.name}</p>
+                        <p><strong>Student ID:</strong> ${student.student_id}</p>
+                        <p><strong>Room Number:</strong> ${student.room_number}</p>
+                        <p><strong>Hostel:</strong> ${student.hostel_name}</p>
+                        <p><strong>Fees Due:</strong> ৳${student.fees_due.toFixed(2)}</p>
+                    </div>
+                `;
+            } else {
+                studentContentArea.innerHTML += '<p class="text-red-500">Error: Your information could not be found.</p>';
+            }
+            applyTheme();
+        }
+        
+        function renderLodgeComplaintForm() {
+            const formHtml = `
+                <form id="lodge-complaint-form" class="space-y-4">
+                    <div>
+                        <label for="complaint-text" class="block text-sm font-medium text-gray-700">Your Complaint</label>
+                        <textarea id="complaint-text" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-orange-500 text-white rounded-md hover:bg-orange-600">Lodge Complaint</button>
+                </form>
+            `;
+            studentContentArea.innerHTML += formHtml;
+
+            document.getElementById('lodge-complaint-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const complaintText = document.getElementById('complaint-text').value;
+                const studentData = findStudentInAnyHostel(loggedInStudentId);
+                
+                if (studentData) {
+                    const hostel = hostels[studentData.hostelIndex];
+                    if (hostel.total_complaints >= MAX_STUDENTS) {
+                        alert('Complaint box is full. Please try again later.');
+                        return;
+                    }
+
+                    const newComplaint = {
+                        student_id: loggedInStudentId,
+                        complaint_text: complaintText,
+                        is_resolved: false
+                    };
+                    hostel.complaints.push(newComplaint);
+                    hostel.total_complaints++;
+                    alert('Complaint lodged successfully.');
+                    saveHostelsToLocalStorage();
+                    showStudentSection('lodge-complaint');
+                } else {
+                    alert('Could not find your hostel. Cannot lodge a complaint.');
+                }
+            });
+            applyTheme();
+        }
+        
+        function viewHallNotice() {
+            const studentData = findStudentInAnyHostel(loggedInStudentId);
+            if (studentData) {
+                const notice = hostels[studentData.hostelIndex].notice;
+                studentContentArea.innerHTML += `
+                    <div class="p-4 bg-white rounded-md shadow-sm">
+                        <p>${notice}</p>
+                    </div>
+                `;
+            } else {
+                studentContentArea.innerHTML += '<p class="text-red-500">Could not find your hostel to show the notice.</p>';
+            }
+            applyTheme();
+        }
+
+        function renderPayFeeForm() {
+            const studentData = findStudentInAnyHostel(loggedInStudentId);
+            if (!studentData) {
+                studentContentArea.innerHTML += '<p class="text-red-500">Error: Your information could not be found.</p>';
+                return;
+            }
+            const student = studentData.student;
+            const formHtml = `
+                <div class="mb-4">
+                    <p><strong>Fees Due:</strong> ৳${student.fees_due.toFixed(2)}</p>
+                </div>
+                <form id="pay-fee-form" class="space-y-4">
+                    <div>
+                        <label for="mobile-number" class="block text-sm font-medium text-gray-700">Mobile Banking Number</label>
+                        <input type="text" id="mobile-number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="transaction-id" class="block text-sm font-medium text-gray-700">Transaction ID</label>
+                        <input type="text" id="transaction-id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="pay-amount" class="block text-sm font-medium text-gray-700">Amount to Pay</label>
+                        <input type="number" id="pay-amount" step="0.01" max="${student.fees_due}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700">Submit Payment</button>
+                </form>
+            `;
+            studentContentArea.innerHTML += formHtml;
+
+            document.getElementById('pay-fee-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const mobileNumber = document.getElementById('mobile-number').value;
+                const transactionId = document.getElementById('transaction-id').value;
+                const payAmount = parseFloat(document.getElementById('pay-amount').value);
+
+                if (!mobileNumber.match(/^\d{11}$/)) {
+                    alert('Please enter a valid 11-digit mobile banking number.');
+                    return;
+                }
+                if (!transactionId) {
+                    alert('Please enter a valid transaction ID.');
+                    return;
+                }
+                if (payAmount <= 0 || payAmount > student.fees_due) {
+                    alert('Invalid payment amount.');
+                    return;
+                }
+
+                // Save payment request for admin review
+                paymentRequests.push({
+                    student_id: student.student_id,
+                    student_name: student.name,
+                    hostel_name: student.hostel_name,
+                    mobile_number: mobileNumber,
+                    transaction_id: transactionId,
+                    pay_amount: payAmount,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('paymentRequests', JSON.stringify(paymentRequests));
+
+                alert('Payment request submitted! Admin will verify and update your fees.');
+                showStudentSection('pay-fee');
+            });
+            applyTheme();
+        }
+
+        function renderChangeStudentPasswordForm() {
+            const formHtml = `
+                <form id="change-student-password-form" class="space-y-4">
+                    <div>
+                        <label for="current-student-password" class="block text-sm font-medium text-gray-700">Current Password</label>
+                        <input type="password" id="current-student-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div>
+                        <label for="new-student-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" id="new-student-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700">Change Password</button>
+                </form>
+            `;
+            studentContentArea.innerHTML += formHtml;
+
+            document.getElementById('change-student-password-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const currentPassword = document.getElementById('current-student-password').value;
+                const newPassword = document.getElementById('new-student-password').value;
+                const studentData = findStudentInAnyHostel(loggedInStudentId);
+                if (studentData && studentData.student.password === currentPassword) {
+                    studentData.student.password = newPassword;
+                    saveHostelsToLocalStorage();
+                    alert('Password changed successfully.');
+                    showStudentSection('');
+                } else {
+                    alert('Current password is incorrect.');
+                }
+            });
+            applyTheme();
+        }
+
+        function renderResetLocalDataForm() {
+            const formHtml = `
+                <form id="reset-local-data-form" class="space-y-4">
+                    <div>
+                        <label for="reset-admin-password" class="block text-sm font-medium text-gray-700">Enter Admin Password to Confirm</label>
+                        <input type="password" id="reset-admin-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700">Delete All Data & Reset</button>
+                </form>
+                <p class="text-red-500 mt-4">Warning: This will permanently delete all hostel, student, complaint, payment, and admin data from this browser and reset to default.</p>
+            `;
+            adminContentArea.innerHTML += formHtml;
+
+            document.getElementById('reset-local-data-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const enteredPassword = document.getElementById('reset-admin-password').value;
+                if (enteredPassword !== ADMIN_PASSWORD) {
+                    alert('Incorrect admin password. Data not deleted.');
+                    return;
+                }
+                // Clear all localStorage and reset to default
+                localStorage.clear();
+                initializeHostels();
+                saveHostelsToLocalStorage();
+                localStorage.setItem('adminUsername', 'admin');
+                localStorage.setItem('adminPassword', 'password');
+                localStorage.setItem('paymentRequests', JSON.stringify([]));
+                alert('All local data deleted and reset to default. The page will now reload.');
+                location.reload();
+            });
+            applyTheme();
+        }
+
+        // --- Event Listeners ---
+        // --- Simple Captcha Logic ---
+        function generateCaptcha() {
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            return {
+                question: `What is ${a} + ${b}?`,
+                answer: (a + b).toString()
+            };
+        }
+
+        // Admin captcha
+        let adminCaptcha = generateCaptcha();
+        document.getElementById('admin-captcha-label').textContent = adminCaptcha.question;
+
+        // Student captcha
+        let studentCaptcha = generateCaptcha();
+        document.getElementById('student-captcha-label').textContent = studentCaptcha.question;
+
+        adminLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            const captchaInput = document.getElementById('admin-captcha-answer').value.trim();
+            if (captchaInput !== adminCaptcha.answer) {
+                alert('Captcha incorrect. Please try again.');
+                adminCaptcha = generateCaptcha();
+                document.getElementById('admin-captcha-label').textContent = adminCaptcha.question;
+                document.getElementById('admin-captcha-answer').value = '';
+                return;
+            }
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                showScreen('admin-dashboard');
+                populateHostelSelector();
+                showSection(''); // Clear content area
+            } else {
+                alert('Invalid admin credentials.');
+            }
+        });
+
+        studentLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const studentId = document.getElementById('student-id-login').value;
+            const password = document.getElementById('student-password-login').value;
+            const captchaInput = document.getElementById('student-captcha-answer').value.trim();
+            if (captchaInput !== studentCaptcha.answer) {
+                alert('Captcha incorrect. Please try again.');
+                studentCaptcha = generateCaptcha();
+                document.getElementById('student-captcha-label').textContent = studentCaptcha.question;
+                document.getElementById('student-captcha-answer').value = '';
+                return;
+            }
+            const studentData = findStudentInAnyHostel(studentId);
+            if (studentData && studentData.student.password === password) {
+                loggedInStudentId = studentId;
+                showScreen('student-dashboard');
+                currentHostelIndex = studentData.hostelIndex;
+                showStudentSection('');
+            } else {
+                alert('Invalid student credentials.');
+            }
+        });
+
+        document.getElementById('admin-login-choice-btn').addEventListener('click', showAdminLoginPanel);
+        document.getElementById('student-login-choice-btn').addEventListener('click', showStudentLoginPanel);
+
+        hostelSelector.addEventListener('change', function(e) {
+            currentHostelIndex = parseInt(e.target.value);
+            showSection(''); // Clear content area and show default message
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            currentHostelIndex = -1;
+            showLoginChoiceScreen();
+        });
+        
+        studentLogoutBtn.addEventListener('click', () => {
+            loggedInStudentId = '';
+            currentHostelIndex = -1;
+            showLoginChoiceScreen();
+        });
+
+        document.getElementById('show-admin-password').addEventListener('change', function() {
+            const input = document.getElementById('admin-password');
+            input.type = this.checked ? 'text' : 'password';
+        });
+
+        document.getElementById('show-student-password').addEventListener('change', function() {
+            const input = document.getElementById('student-password-login');
+            input.type = this.checked ? 'text' : 'password';
+        });
+
+        // Initial load
+        loadHostelsFromLocalStorage();
+        if (hostels.length > 0) {
+            populateHostelSelector();
+        }
+    </script>
+</body>
+</html>
